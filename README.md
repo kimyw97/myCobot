@@ -1,6 +1,10 @@
 # myCobot
 코봇을 사용한 미니 프로젝트 및 실습 코드
 
+# ENV
+- python 3.10.7
+- pymycobot 3.6.7
+
 # Troubletroubleshooting
 1. Tread_Lock Attribute Error
 python 3.11.7 버전과 pymycobot 3.8.0 버전 사용하면 `send_angles()`함수 호출 시 Attribute Error 발생
@@ -12,3 +16,5 @@ python 3.11.7 버전과 pymycobot 3.8.0 버전 사용하면 `send_angles()`함�
 Transponder -> USB UART -> Atom:ok 이 창에서 해야만 가능(아마 통신 모드로 변경하는 기능 같음)
 
  # Video
+https://github.com/user-attachments/assets/49243cae-5a38-4b79-a950-45fea70d3174
+
