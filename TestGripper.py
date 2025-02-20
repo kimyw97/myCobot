@@ -1,0 +1,42 @@
+from pymycobot import MyCobot320
+import time
+
+mc = MyCobot320('COM4')
+mc.set_gripper_mode(0)
+mode = mc.get_gripper_mode()
+print('GRIPPER MODE = ', 'transparent transmission' if mode == 0 else 'port mode')
+mc.init_eletric_gripper()
+print('OPEN')
+mc.set_eletric_gripper(0)
+mc.set_gripper_value(100, 20)
+print('CLOSE')
+mc.set_eletric_gripper(1)
+mc.set_gripper_value(0, 20)
+
+print('OPEN')
+mc.set_eletric_gripper(0)
+mc.set_gripper_value(100, 20)
+print('CLOSE')
+mc.set_eletric_gripper(1)
+mc.set_gripper_value(0, 20)
+
+print('OPEN')
+mc.set_eletric_gripper(0)
+mc.set_gripper_value(100, 20)
+print('CLOSE')
+mc.set_eletric_gripper(1)
+mc.set_gripper_value(0, 20)
+
+print('OPEN')
+mc.set_eletric_gripper(0)
+mc.set_gripper_value(100, 20)
+print('CLOSE')
+mc.set_eletric_gripper(1)
+mc.set_gripper_value(0, 20)
+
+print('OPEN')
+mc.set_eletric_gripper(0)
+mc.set_gripper_value(100, 20)
+print('CLOSE')
+mc.set_eletric_gripper(1)
+mc.set_gripper_value(0, 20)
