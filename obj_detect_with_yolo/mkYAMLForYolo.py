@@ -1,10 +1,10 @@
 import yaml
-data = {'train' : './error_dectection/train/images',
-        'test' : './error_dectection/test/images',
-        'val' : './error_dectection/valid/images',
+data = {'train' : './train/images',
+        'test' : './test/images',
+        'val' : './valid/images',
         'nc': 2,
         'names': ['normal','error']
 }
 
-with open('./datasets/error_detection/custom_data.yaml', 'w') as f:
+with open('./datasets/cobot_control/custom_data.yaml', 'w') as f:
   yaml.dump(data, f)
