@@ -1,0 +1,8 @@
+opencv-python==4.11.0.86
+ultralytics==8.3.100
+torch==2.6.0
+torchvision==0.21.0
+albumentations==2.0.5
+pymycobot==3.9.1
+numpy==1.26.4
+matplotlib==3.9.2
