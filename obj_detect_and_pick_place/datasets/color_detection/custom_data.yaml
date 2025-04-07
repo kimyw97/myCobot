@@ -1,0 +1,11 @@
+# @format
+
+names:
+  - blue
+  - green
+  - red
+  - yellow
+nc: 4
+test: /Users/kyw/VSCode/myCobot/obj_detect_and_pick_place/datasets/color_detection/test/images
+train: /Users/kyw/VSCode/myCobot/obj_detect_and_pick_place/datasets/color_detection/train/images
+val: /Users/kyw/VSCode/myCobot/obj_detect_and_pick_place/datasets/color_detection/valid/images

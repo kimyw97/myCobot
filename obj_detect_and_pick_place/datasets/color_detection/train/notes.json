@@ -1,0 +1,25 @@
+{
+  "categories": [
+    {
+      "id": 0,
+      "name": "blue"
+    },
+    {
+      "id": 1,
+      "name": "green"
+    },
+    {
+      "id": 2,
+      "name": "red"
+    },
+    {
+      "id": 3,
+      "name": "yellow"
+    }
+  ],
+  "info": {
+    "year": 2025,
+    "version": "1.0",
+    "contributor": "Label Studio"
+  }
+}
