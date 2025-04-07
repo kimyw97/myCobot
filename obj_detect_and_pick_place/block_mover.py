@@ -78,104 +78,88 @@ def place_object_by_color(color):
 
     global detected_color
     detected_color = ''
+
+def detect_block_color():
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("웹캠 열기 실패")
+        return ''
+    start_time = time.time()
+    while time.time() - start_time < 3:  # 최대 3초 대기
+        ret, frame = cap.read()
+        if not ret:
+            continue
+        results = model(frame, verbose=False)
+        boxes = results[0].boxes
+        for box in boxes:
+            cls_id = int(box.cls[0])
+            label = model.names[cls_id]
+            conf = float(box.conf[0])
+            if conf > 0.6:  # 신뢰도 필터링
+                cap.release()
+                return label
+    cap.release()
+    return ''
         
 
 def main():
-    #로봇팔 원점 이동
-    mc.send_angles(home_angles, 20)
-    print("로봇팔 원점으로 이동")
-    time.sleep(3)
-    #-----------------------------반복문 시작
-
-    # 컨베이어 위치 (for카메라 인식)로 로봇팔 이동
-    mc.send_angles(cam_detecting_point,20)
-    print("객체인식 준비 완료")
-    time.sleep(5)
     
-    # #a단계
-    # #카메라로 블록 및 색상 인식
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        print("웹캠을 열 수 없습니다.")
-        exit()
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            break
+    time.sleep(1.5)
+    mc.send_angles(cam_detecting_point, 20)
+    print("객체 인식 위치 이동 중...")
+    time.sleep(1.5)
+    global detected_color
+    detected_color = detect_block_color()
+    if not detected_color:
+        print("객체 인식 실패. 다시 시도합니다.")
+        return
+    print(f"감지된 색상: {detected_color}")
 
-        # YOLO로 추론
-        results = model(frame, verbose=False)
-
-        # 결과 박스 그리기
-        boxes = results[0].boxes
-        global detected_color
-        for box in boxes:
-            x1, y1, x2, y2 = map(int, box.xyxy[0])
-            conf = float(box.conf[0])
-            cls_id = int(box.cls[0])
-            label = model.names[cls_id]
-
-        # 박스와 라벨 그리기
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(
-                frame,
-                f"{label} {conf:.2f}",
-                (x1, y1 - 10),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.5,
-                (0, 255, 0),
-                2)
-
-        # 화면에 표시
-        cv2.imshow("YOLOv8 Webcam Detection", frame)
-        
-        if detected_color != '':
-            break
-
-    cap.release()
-    time.sleep(2.0)
-    cv2.destroyAllWindows()
 
     # 그리퍼 열기
     mc.set_gripper_state(0,50,4)
-    time.sleep(5)
+    time.sleep(1)
     
     #픽업하기 위한 위치로 로봇팔 이동
     mc.send_angles(pickup_point,20)
     print("객체 pick up 위치로 이동")
-    time.sleep(5)
+    time.sleep(1.5)
 
     #그리퍼 닫기(물체 감도 인식으로)
     mc.set_gripper_state(1,50,4)
-    time.sleep(2)
+    time.sleep(1)
     print("물체 잡았습니다. 이동합니다.")
     
 
     #걸릴까봐 카메라basepoint로 이동
     mc.send_angles(cam_detecting_point,20)
-    time.sleep(5)
+    time.sleep(1.5)
 
     # 물체 적재 basepoint로 로봇팔 이동
     mc.send_angles(stack_base_point,20)
-    time.sleep(5)
+    time.sleep(1.5)
     
     place_object_by_color(detected_color)
-    time.sleep(5)
+    time.sleep(1)
     
     # 그리퍼 열기
     mc.set_gripper_state(0,50,4)
-    time.sleep(5)
+    time.sleep(1)
     print("물체 적재")
 
 
     #basepoint로 로봇팔 이동
     mc.send_angles(stack_base_point, 30)
-    time.sleep(2)
+    time.sleep(1)
     
-    # 그리퍼 닫기기
+    # 그리퍼 닫기
     mc.set_gripper_state(1,50,4)
-    time.sleep(2)
+    time.sleep(1)
     print("물체 적재")
+    
+    mc.send_angles(home_angles, 20)
+    print("원점 이동 중...")
+    time.sleep(5)
 
     #----------------------------------------------반복문끝
     
@@ -186,6 +170,10 @@ def input_keyboard():
     stop_flag = True
     
 threading.Thread(target=input_keyboard, daemon=True).start()
+
+mc.send_angles(home_angles, 20)
+print("원점 이동 중...")
+time.sleep(5)
 
 while not stop_flag:
     main()
