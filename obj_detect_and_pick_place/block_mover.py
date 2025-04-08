@@ -71,14 +71,14 @@ def place_object_by_color(color):
         print(f"{color} 블록 적재 위치로 이동중...(Z + {z_offset}mm)")
         print(base_position)
         mc.sync_send_coords(base_position,20)
-        time.sleep(3)
+        time.sleep(2)
         
         stack_count[color] += 1
         
     elif color == err_color:
         print("불량품 감지 - 처리 위치로 이동중...")
         mc.sync_send_coords(waste_coords, 20)
-        time.sleep(3)
+        time.sleep(2)
         
     else:
         print(f"{color}는 등록되지 않은 색상. 아무 작업 수행 x")
@@ -95,7 +95,7 @@ def detect_block_color():
         return ''
     start_time = time.time()
     label = ''
-    while time.time() - start_time < 3:  # 최대 3초 대기
+    while time.time() - start_time < 2:  # 최대 3초 대기
         ret, frame = cap.read()
         if not ret:
             continue
@@ -119,8 +119,6 @@ def main():
     if cmd == 'q':
         stop_flag = True
     
-    time.sleep(1.5)
-    mc.send_angles(cam_detecting_point, 60)
     print("객체 인식 위치 이동 중...")
     time.sleep(1.5) 
     global detected_color
@@ -141,7 +139,7 @@ def main():
     #픽업하기 위한 위치로 로봇팔 이동
     mc.send_angles(pickup_point,60)
     print("객체 pick up 위치로 이동")
-    time.sleep(5)
+    time.sleep(1.5)
 
     #그리퍼 닫기(물체 감도 인식으로)
     mc.set_gripper_state(1, 40, 4)
@@ -175,16 +173,13 @@ def main():
     time.sleep(1)
     print("물체 적재")
     
-    mc.send_angles(home_angles, 60)
-    print("원점 이동 중...")
-    time.sleep(5)
+    mc.send_angles(cam_detecting_point, 60)
+    time.sleep(1.5)
 
     #----------------------------------------------반복문끝
 
-# mc.init_electric_gripper()
-mc.send_angles(home_angles, 60)
-print("원점 이동 중...")
-time.sleep(5)
+mc.send_angles(cam_detecting_point, 60)
+time.sleep(1.5)
 
 while not stop_flag:
     main()
