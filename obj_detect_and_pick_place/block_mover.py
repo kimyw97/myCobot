@@ -5,9 +5,9 @@ from ultralytics import YOLO
 
 stop_flag = False
 
-mc = MyCobot320('/dev/tty.usbserial-575E0789631', 115200)
+mc = MyCobot320('COM8', 115200)
 
-model = YOLO("/Users/kyw/VSCode/myCobot/obj_detect_and_pick_place/runs/detect/train9/weights/best.pt")
+model = YOLO(r"C:\Users\okpjh\Documents\vscode\myCobot\obj_detect_and_pick_place\runs\detect\train9\weights\best.pt")
 
 mc.power_on()
 time.sleep(1)
@@ -22,13 +22,13 @@ cam_detecting_point = [32.25, -20.3, 74.44, 7.91, -71.98, -44.73]
 #적재 베이스 포인트 위치
 stack_base_point = [-34.1, -0.08, 32.16, 7.82, -83.84, -26.63]
 #컨베이어 물체 픽업 위치
-pickup_point = [33.66, -5.0, 83.05, -7.29, -77.51, -56.42]
+pickup_point = [31.65, -2.0, 83.05, -4.28, -77.51, -56.42]
 #red 적재 위치
-red_position = [-7.29, 33.92, 52.55, -6.41, -89.73, -10.1]
+red_position = [-11.29, 37.92, 52.55, -6.41, -89.73, -10.1]
 #yellow 적재 위치치
-yellow_position = [-31.02, 37.61, 48.51, -1.23, -83.14, -32.08]
+yellow_position = [-34.01, 37.61, 48.51, -1.23, -83.14, -32.08]
 #green 적재 위치치
-green_position = [-47.1, 50.71, 31.28, -2.63, -88.15, -44.47]
+green_position = [-40.1, 50.71, 31.28, -2.63, -88.15, -44.47]
 #불량품 위치
 waste_position = [-87.8, 11.51, 52.2, -2.02, -92.9, -3.51]
 #----------------------------------------------
@@ -58,8 +58,8 @@ is_color_detecting = False
 def place_object_by_color(color):
     if color != err_color:
         base_position = positions[color].copy()
-        z_offset= 25*stack_count[color]
-        base_position[2] += z_offset
+        z_offset= 7*stack_count[color]
+        base_position[1] -= z_offset
         
         print(f"{color} 블록 적재 위치로 이동중...(Z + {z_offset}mm)")
         mc.send_angles(base_position,60)
@@ -115,11 +115,11 @@ def main():
     mc.send_angles(cam_detecting_point, 60)
     print("객체 인식 위치 이동 중...")
     time.sleep(1.5) 
+    global detected_color
+    detected_color = detect_block_color()
     global is_color_detecting
     while is_color_detecting:
         print('색깔 감지중')
-    global detected_color
-    detected_color = detect_block_color()
     if detected_color == '':
         print("객체 인식 실패. 다시 시도합니다.")
         return
@@ -127,12 +127,13 @@ def main():
 
     # 그리퍼 열기
     mc.set_gripper_state(0,50,4)
+    print("그리퍼가 열렸습니다")
     time.sleep(1)
     
     #픽업하기 위한 위치로 로봇팔 이동
     mc.send_angles(pickup_point,60)
     print("객체 pick up 위치로 이동")
-    time.sleep(1.5)
+    time.sleep(5)
 
     #그리퍼 닫기(물체 감도 인식으로)
     mc.set_gripper_state(1,50,4)

@@ -2,7 +2,7 @@ import cv2
 from ultralytics import YOLO
 
 # YOLO 모델 로드 (필요에 따라 yolov8n.pt, yolov8s.pt, yolov8m.pt 등 사용 가능)
-model = YOLO("/Users/kyw/VSCode/myCobot/obj_detect_and_pick_place/runs/detect/train9/weights/best.pt")
+model = YOLO(r"C:\Users\okpjh\Documents\vscode\myCobot\obj_detect_and_pick_place\runs\detect\train9\weights\best.pt")
 
 # 웹캠 열기 (0번은 기본 카메라)
 cap = cv2.VideoCapture(0)
