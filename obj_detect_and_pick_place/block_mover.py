@@ -35,7 +35,7 @@ waste_position = [-87.8, 11.51, 52.2, -2.02, -92.9, -3.51]
 # coords 위치좌표 -----------------------------
 red_coords = [-315.6, -67.0, 220.3, -174.15, -0.73, 88.48]
 yellow_coords = [-303.7, 64.1, 224.3, -172.99, 3.68, 87.82]
-green_coords = [-291.1, 150.0, 215.6, -170.93, -6.45, 87.53]
+green_coords = [-291.1, 150.0, 216.3j, -170.93, -6.45, 87.53]
 waste_coords = [-92.9, 247.3, 344.7, -152.36, -4.04, 3.58]
 #____________________________-------------------
 
@@ -65,11 +65,14 @@ is_color_detecting = False
 def place_object_by_color(color):
     if color != err_color:
         base_position = positions[color].copy()
+        pre_base_position = positions[color].copy()
         z_offset= 25*stack_count[color]
+        pre_base_position += z_offset + 50
         base_position[2] += z_offset
         
         print(f"{color} 블록 적재 위치로 이동중...(Z + {z_offset}mm)")
         print(base_position)
+        mc.sync_send_coords(pre_base_position,60)
         mc.sync_send_coords(base_position,20)
         time.sleep(2)
         
