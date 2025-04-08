@@ -95,7 +95,7 @@ def detect_block_color():
         return ''
     start_time = time.time()
     label = ''
-    while time.time() - start_time < 2:  # 최대 3초 대기
+    while time.time() - start_time < 1:  # 최대 1초 대기
         ret, frame = cap.read()
         if not ret:
             continue
@@ -120,7 +120,6 @@ def main():
         stop_flag = True
     
     print("객체 인식 위치 이동 중...")
-    time.sleep(1.5) 
     global detected_color
     detected_color = detect_block_color()
     global is_color_detecting
@@ -156,7 +155,6 @@ def main():
     time.sleep(1.5)
     
     place_object_by_color(detected_color)
-    time.sleep(1)
     
     # 그리퍼 열기
     mc.set_gripper_value(40, 50, 1)
